@@ -4,40 +4,7 @@ from matplotlib import animation, rc
 from matplotlib.animation import FuncAnimation
 
 
-# lets initalize grid size
-N = 75
 
-generations = 40
-p_seed = 0.5
-
-# Let
-Grid = np.zeros((N,N))
-Data = np.zeros(N*N*generations).reshape(N, N, generations)
-
-#random initial grid
-for i in range(N):
-  for j in range(N):
-    if (p_seed<np.random.rand()):
-      Grid[i][j]=0
-    else:
-      Grid[i][j]=1
-    if i==0 or i==N-1:
-      Grid[i][j]=0
-    if j==0 or j==N-1:
-      Grid[i][j]=0
-
-
-#beacon - try this one!
-# Grid[1][1]=1
-# Grid[1][2]=1
-# Grid[2][1]=1
-
-# Grid[4][3]=1
-# Grid[3][4]=1
-# Grid[4][4]=1
-
-plt.imshow(Grid, cmap='binary')
-plt.show()
 
 def neighbors(X, i, j):
   counter =0
@@ -69,21 +36,58 @@ def evolve(X):
   X=X_new
   return X
 
-for t in range(generations):
+
+
+if __name__ == "__main__":
+  # lets initalize grid size
+  N = 75
+
+  generations = 40
+  p_seed = 0.5
+
+  # Let
+  Grid = np.zeros((N,N))
+  Data = np.zeros(N*N*generations).reshape(N, N, generations)
+
+  #random initial grid
   for i in range(N):
     for j in range(N):
-      Data[i][j][t] = Grid[i][j]
-  Grid = evolve(Grid)
-plt.rcParams["figure.figsize"] = [7.50, 3.50]
-plt.rcParams["figure.autolayout"] = True
+      if (p_seed<np.random.rand()):
+        Grid[i][j]=0
+      else:
+        Grid[i][j]=1
+      if i==0 or i==N-1:
+        Grid[i][j]=0
+      if j==0 or j==N-1:
+        Grid[i][j]=0
 
-fig, ax = plt.subplots()
 
-def animate(i):
-   ax.clear()
-   ax.imshow(Data[:, :, i],cmap='binary')
+  #beacon - try this one!
+  # Grid[1][1]=1
+  # Grid[1][2]=1
+  # Grid[2][1]=1
 
-ani = animation.FuncAnimation(fig, animate, generations, interval=50, blit=False)
+  # Grid[4][3]=1
+  # Grid[3][4]=1
+  # Grid[4][4]=1
 
-rc('animation', html='jshtml')
+  plt.imshow(Grid, cmap='binary')
+  plt.show()
 
+  for t in range(generations):
+    for i in range(N):
+      for j in range(N):
+        Data[i][j][t] = Grid[i][j]
+    Grid = evolve(Grid)
+  plt.rcParams["figure.figsize"] = [7.50, 3.50]
+  plt.rcParams["figure.autolayout"] = True
+
+  fig, ax = plt.subplots()
+
+  def animate(i):
+    ax.clear()
+    ax.imshow(Data[:, :, i],cmap='binary')
+
+  ani = animation.FuncAnimation(fig, animate, generations, interval=50, blit=False)
+
+  rc('animation', html='jshtml')
